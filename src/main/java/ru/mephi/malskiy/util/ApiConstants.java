@@ -7,6 +7,7 @@ import java.util.Properties;
 
 public class ApiConstants {
     public static final String YANDEX_API_WEATHER_KEY;
+    public static final String BASE_URL = "https://api.weather.yandex.ru/v2/forecast";
 
     static {
         Properties props = new Properties();
