@@ -25,16 +25,26 @@ public class WeatherService {
             .build();
 
         try {
+
+            // получили json от сервиса
             HttpResponse<String> response =  httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
 
+            // отфарматировали json
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
             String prettyJson = gson.toJson(jsonObject);
-
+            System.out.println("Весь ответ от сервера: ");
             System.out.println(prettyJson);
 
+            // взяли и json текущую температуру
+            JsonObject fact = jsonObject.get("fact").getAsJsonObject();
+            int temp = fact.get("temp").getAsInt();
+            System.out.println("Текущая температура: " + temp + "°C");
+
+
+
         } catch (IOException | InterruptedException e) {
+            System.out.println("Ошибка при обращении к API");
             System.out.println(e.getMessage());
         }
 
