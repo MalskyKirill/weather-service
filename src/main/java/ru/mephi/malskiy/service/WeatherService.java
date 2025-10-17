@@ -69,5 +69,6 @@ public class WeatherService {
 
         double avg = (double) sum / lim;
         System.out.printf("Средняя температура за %d дней: %.1f°C%n", lim, avg);
+        System.out.println();
     }
 }
