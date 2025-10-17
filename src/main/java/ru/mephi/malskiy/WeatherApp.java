@@ -31,7 +31,7 @@ public class WeatherApp {
                 scanner.nextLine();
 
                 if (lim < 1 || lim > 11) {
-                    System.out.println("Количество дней не может быть меньше 1");
+                    System.out.println("Количество дней не может быть меньше 1 и больше 11");
                     continue;
                 }
 
