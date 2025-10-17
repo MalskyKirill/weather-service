@@ -1,9 +1,6 @@
 package ru.mephi.malskiy.service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import ru.mephi.malskiy.util.ApiConstants;
 
 import java.io.IOException;
@@ -17,10 +14,10 @@ public class WeatherService {
     public WeatherService() {
         this.httpClient = HttpClient.newHttpClient();
     }
-    public void getWeather(String coordinates) {
+    public void getWeather(String coordinates, int lim) {
 
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://api.weather.yandex.ru/v2/forecast?" + coordinates + "&limit=2"))
+            .uri(URI.create("https://api.weather.yandex.ru/v2/forecast?" + coordinates + "&limit=" + lim))
             .header("X-Yandex-Weather-Key", ApiConstants.YANDEX_API_WEATHER_KEY)
             .build();
 
@@ -40,6 +37,20 @@ public class WeatherService {
             JsonObject fact = jsonObject.get("fact").getAsJsonObject();
             int temp = fact.get("temp").getAsInt();
             System.out.println("Текущая температура: " + temp + "°C");
+
+            // подсчет средней температуры за кол-во (lim) суток
+            JsonArray forecasts = jsonObject.getAsJsonArray("forecasts");
+            int sum = 0;
+            for (JsonElement el : forecasts) {
+                JsonObject forecast = el.getAsJsonObject();
+                JsonObject parts = forecast.getAsJsonObject("parts");
+                JsonObject day = parts.getAsJsonObject("day");
+                int tempAvg = day.get("temp_avg").getAsInt();
+                sum += tempAvg;
+            }
+
+            double avg = (double) sum / lim;
+            System.out.printf("Средняя температура за %d дней: %.1f°C%n", lim, avg);
 
 
 
